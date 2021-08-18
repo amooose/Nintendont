@@ -1,5 +1,6 @@
-### Nintendont
+### Nintendont-CStickInvertOption
 A Wii Homebrew Project to play GC Games on Wii and vWii on Wii U
+Edit: Added two C-Stick invert options X/Y axis in the settings.
 
 ### Features:
 * Works on Wii and Wii U (in vWii mode)
