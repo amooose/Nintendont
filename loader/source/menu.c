@@ -895,6 +895,12 @@ static const char *const *GetSettingsDescription(const MenuCtx *ctx)
 
 			case NIN_CFG_BIT_OSREPORT:
 				break;
+				
+			case NIN_CFG_BIT_CSTICKX_INV:
+				break;
+			
+			case NIN_CFG_BIT_CSTICKY_INV:
+				break;
 
 			case NIN_CFG_BIT_USB: {	// WiiU Widescreen
 				static const char *desc_wiiu_widescreen[] = {
@@ -1147,7 +1153,7 @@ static bool UpdateSettingsMenu(MenuCtx *ctx)
 
 		// Check for wraparound.
 		if ((ctx->settings.settingPart == 0 && ctx->settings.posX >= NIN_SETTINGS_LAST) ||
-		    (ctx->settings.settingPart == 1 && ctx->settings.posX >= 9))
+		    (ctx->settings.settingPart == 1 && ctx->settings.posX >= 11))
 		{
 			ctx->settings.posX = 0;
 			ctx->settings.settingPart ^= 1;
@@ -1174,7 +1180,7 @@ static bool UpdateSettingsMenu(MenuCtx *ctx)
 			if (ctx->settings.settingPart == 0) {
 				ctx->settings.posX = NIN_SETTINGS_LAST - 1;
 			} else {
-				ctx->settings.posX = 7;
+				ctx->settings.posX = 10;
 			}
 		}
 
@@ -1430,6 +1436,20 @@ static bool UpdateSettingsMenu(MenuCtx *ctx)
 					}
 					ctx->redraw = true;
 					break;
+					
+				case 9:
+					// BBA Emulation
+					ctx->saveSettings = true;
+					ncfg->Config ^= (NIN_CFG_CSTICKX_INV);
+					ctx->redraw = true;
+					break;
+					
+				case 10:
+					// BBA Emulation
+					ctx->saveSettings = true;
+					ncfg->Config ^= (NIN_CFG_CSTICKY_INV);
+					ctx->redraw = true;
+					break;
 
 				default:
 					break;
@@ -1621,6 +1641,14 @@ static bool UpdateSettingsMenu(MenuCtx *ctx)
 			PrintFormat(MENU_SIZE, (IsWiiU() ? BLACK : DARK_GRAY), MENU_POS_X+320, SettingY(ListLoopIndex),
 			"%-18s:%-4s", "WiiU Gamepad Slot", "None");	
 		}
+		ListLoopIndex++;
+		
+		PrintFormat(MENU_SIZE, BLACK, MENU_POS_X + 320, SettingY(ListLoopIndex),
+			    "%-18s:%-4s", "Invert CStick X Axis", (ncfg->Config & (NIN_CFG_CSTICKX_INV)) ? "On" : "Off");
+		ListLoopIndex++;
+		
+		PrintFormat(MENU_SIZE, BLACK, MENU_POS_X + 320, SettingY(ListLoopIndex),
+			    "%-18s:%-4s", "Invert CStick Y Axis", (ncfg->Config & (NIN_CFG_CSTICKY_INV)) ? "On" : "Off");
 		ListLoopIndex++;
 
 		// Draw the cursor.

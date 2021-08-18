@@ -676,14 +676,25 @@ u32 PADRead(u32 calledByGame)
 			tmp_stick = (double)(substickX - HID_CTRL->CStickX.DeadZone) * HID_CTRL->CStickX.Radius / 1000;
 		else if(substickX < -HID_CTRL->CStickX.DeadZone && substickX < 0)
 			tmp_stick = (double)(substickX + HID_CTRL->CStickX.DeadZone) * HID_CTRL->CStickX.Radius / 1000;
-		Pad[chan].substickX = tmp_stick;
+		//INVERT X SETTING
+		if(((NIN_CFG*)0x93004000)->Config & NIN_CFG_CSTICKX_INV){
+			Pad[chan].substickX = -tmp_stick;
+		} else{
+			Pad[chan].substickX = tmp_stick;
+		}
 
 		tmp_stick = 0;
 		if(substickY > HID_CTRL->CStickY.DeadZone && substickY > 0)
 			tmp_stick = (double)(substickY - HID_CTRL->CStickY.DeadZone) * HID_CTRL->CStickY.Radius / 1000;
 		else if(substickY < -HID_CTRL->CStickY.DeadZone && substickY < 0)
 			tmp_stick = (double)(substickY + HID_CTRL->CStickY.DeadZone) * HID_CTRL->CStickY.Radius / 1000;
-		Pad[chan].substickY = tmp_stick;
+		
+		//INVERT Y SETTING
+		if(((NIN_CFG*)0x93004000)->Config & NIN_CFG_CSTICKY_INV){
+			Pad[chan].substickY = -tmp_stick;
+		} else{
+			Pad[chan].substickY = tmp_stick;
+		}
 /*
 		Pad[chan].stickX = stickX;
 		Pad[chan].stickY = stickY;
@@ -797,7 +808,12 @@ u32 PADRead(u32 calledByGame)
 				tmp_stick = -0x80;
 			else
 				tmp_stick = BTPad[chan].xAxisR;
-			Pad[chan].substickX = tmp_stick;
+			//INVERT X SETTING
+			if(((NIN_CFG*)0x93004000)->Config & NIN_CFG_CSTICKX_INV){
+				Pad[chan].substickX = -tmp_stick;
+			} else{
+				Pad[chan].substickX = tmp_stick;
+			}
 
 			if(BTPad[chan].yAxisR > 0x7F)
 				tmp_stick = 0x7F;
@@ -805,7 +821,12 @@ u32 PADRead(u32 calledByGame)
 				tmp_stick = -0x80;
 			else
 				tmp_stick = BTPad[chan].yAxisR;
-			Pad[chan].substickY = tmp_stick;
+			//INVERT Y SETTING
+			if(((NIN_CFG*)0x93004000)->Config & NIN_CFG_CSTICKY_INV){
+				Pad[chan].substickY = -tmp_stick;
+			} else{
+				Pad[chan].substickY = tmp_stick;
+			}
 		}
 
 		u16 button = 0;
